@@ -17,9 +17,17 @@ int main(void)
 	uint32_t *GPIO_D_mode = (uint32_t*) 0x40020C00; // GPIO D Mode Register Address
 	uint16_t *GPIO_D_output_data = (uint16_t*) 0x40020C14; // GPIO D O/P Data Register Address
 
-	*RCC_clock = 8; // Turning on GPIO D pin that's 3rd bit
-	*GPIO_D_mode = 0b00000001000000000000000000000000; // O/P Mode for PD12 pin
-	*GPIO_D_output_data = 0b0001000000000000; // Turn on PD12 pin
+	// setting 3rd bit of RCC Clock register to enable GPIO D peripheral
+	*RCC_clock |= 8;
+
+	// 24,25 bit position of GPIO D Mode Register should be 0 and 1.
+	// First, clear 24 bit position
+	*GPIO_D_mode &= 0b11111101111111111111111111111111;
+	// set 25 bit position
+	*GPIO_D_mode |= 0b00000001000000000000000000000000;
+
+	// setting 12 bit position of GPIO D o/p data
+	*GPIO_D_output_data |= 0b0001000000000000;
 
 	for(;;);
 }
