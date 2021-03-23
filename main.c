@@ -18,16 +18,16 @@ int main(void)
 	uint16_t *GPIO_D_output_data = (uint16_t*) 0x40020C14; // GPIO D O/P Data Register Address
 
 	// setting 3rd bit of RCC Clock register to enable GPIO D peripheral
-	*RCC_clock |= 8;
+	*RCC_clock |= (1 << 3);
 
 	// 24,25 bit position of GPIO D Mode Register should be 0 and 1.
-	// First, clear 24 bit position
-	*GPIO_D_mode &= 0b11111101111111111111111111111111;
-	// set 25 bit position
-	*GPIO_D_mode |= 0b00000001000000000000000000000000;
+	// First, clear 25 bit position
+	*GPIO_D_mode &= ~(1 << 25);
+	// set 24 bit position
+	*GPIO_D_mode |= (1 << 24);
 
 	// setting 12 bit position of GPIO D o/p data
-	*GPIO_D_output_data |= 0b0001000000000000;
+	*GPIO_D_output_data |= (1 << 12);
 
 	for(;;);
 }
